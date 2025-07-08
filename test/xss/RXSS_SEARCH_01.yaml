@@ -5,8 +5,12 @@ id: RXSS_SEARCH_01
 title: "Reflected XSS – Search 결과 페이지"
 description: >
   /search?q=... 에서 입력값 q 가 HTML에 그대로 반사된다.
-stack: php                                        # php | flask
-host: php.vulnsite.duckdns.org
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:5000  # Flask 애플리케이션 호스트
 endpoint:
   method: GET
   path: /search
@@ -18,12 +22,21 @@ tags: [xss, reflected, search]
 
 # 개발자 참고용
 implementation:
-  notes:
-    summary: >
-      search.php 에서 $_GET['q'] 를 htmlspecialchars 없이 echo.
-    file_path: "public/search.php"
-  database:
-    engine: mysql
-    init_sql: []
+  php:
+    notes:
+      summary: >
+        search.php 에서 $_GET['q'] 를 htmlspecialchars 없이 echo.
+      file_path: "public/search.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        Flask에서 `request.args.get('q')`를 htmlspecialchars 없이 출력하는 취약점.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []
 
 # fixtures: []         # 필요 시 테스트 데이터·파일
