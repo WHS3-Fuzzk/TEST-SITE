@@ -1,0 +1,29 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: RXSS_SEARCH_01
+title: "Reflected XSS – Search 결과 페이지"
+description: >
+  /search?q=... 에서 입력값 q 가 HTML에 그대로 반사된다.
+stack: php                                        # php | flask
+host: php.vulnsite.duckdns.org
+endpoint:
+  method: GET
+  path: /search
+params:
+  q: "<svg/onload=alert(1)>"
+auth_required: false
+severity: high
+tags: [xss, reflected, search]
+
+# 개발자 참고용
+implementation:
+  notes:
+    summary: >
+      search.php 에서 $_GET['q'] 를 htmlspecialchars 없이 echo.
+    file_path: "public/search.php"
+  database:
+    engine: mysql
+    init_sql: []
+
+# fixtures: []         # 필요 시 테스트 데이터·파일
