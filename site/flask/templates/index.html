@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask 취약점 테스트 대시보드</title>
+</head>
+<body>
+    <h1>🔥 Flask 취약점 테스트 페이지</h1>
+    <ul>
+        <li><a href="{{ url_for('search') }}">1. Reflected XSS (/search)</a></li>
+        <li><a href="{{ url_for('comment') }}">2. Stored XSS (/comment)</a></li>
+        <li><a href="{{ url_for('dom_xss') }}">3. DOM XSS (/dom-xss)</a></li>
+        <li><a href="{{ url_for('login') }}">4. SQL Injection – Error-based (/login)</a></li>
+        <li><a href="{{ url_for('upload') }}">5. 파일 업로드 (/upload)</a></li>
+        <li><a href="{{ url_for('ping') }}">6. Command Injection (/ping)</a></li>
+        <li><a href="{{ url_for('fetch') }}">7. SSRF (/fetch)</a></li>
+    </ul>
+</body>
+</html>

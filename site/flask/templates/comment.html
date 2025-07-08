@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Stored XSS</title></head>
+<body>
+    <h2>Stored XSS 게시판</h2>
+    <form method="post">
+        <textarea name="content" rows="4" cols="40" placeholder="댓글 입력"></textarea><br>
+        <button type="submit">등록</button>
+    </form>
+    <hr>
+    <h3>댓글 목록:</h3>
+    {% for c in comments %}
+        <p>{{ c.content | safe }}</p>
+    {% endfor %}
+</body>
+</html>

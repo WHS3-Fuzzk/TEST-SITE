@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>DOM XSS</title></head>
+<body>
+    <h2>DOM XSS 테스트</h2>
+    <input id="input" placeholder="메시지를 입력하세요">
+    <button onclick="run()">실행</button>
+    <div id="output"></div>
+    <script>
+        function run() {
+            var msg = document.getElementById("input").value;
+            document.getElementById("output").innerHTML = msg;
+        }
+    </script>
+</body>
+</html>
