@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: DXSS_DOM_01
+title: "DOM XSS – 클라이언트 사이드"
+description: >
+  JavaScript에서 입력값이 제대로 필터링 없이 DOM에 반영된다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: GET
+  path: /search
+params:
+  q: "<script>alert('DOM XSS')</script>"
+auth_required: false
+severity: high
+tags: [xss, dom]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        JavaScript 코드에서 `$_GET['q']` 값을 필터링 없이 DOM에 삽입하여 XSS 취약점 발생.
+      file_path: "public/search.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        JavaScript 코드에서 `request.args.get('q')` 값을 필터링 없이 DOM에 삽입하여 XSS 취약점 발생.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []

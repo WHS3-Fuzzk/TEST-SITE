@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: SSRF_SERVER_01
+title: "SSRF – 서버 측 요청 조작"
+description: >
+  사용자 입력을 통해 서버가 내부 시스템에 요청을 보내도록 유도한다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: GET
+  path: /fetch
+params:
+  url: "http://localhost/admin"
+auth_required: false
+severity: high
+tags: [ssrf, server, internal]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        PHP에서 사용자 제공 URL로 외부 요청을 보내고 SSRF 취약점 발생.
+      file_path: "public/fetch.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        Flask에서 사용자 제공 URL로 외부 요청을 보내고 SSRF 취약점 발생.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []

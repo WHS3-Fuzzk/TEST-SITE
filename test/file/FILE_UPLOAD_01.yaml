@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: FILE_UPLOAD_01
+title: "파일 업로드 취약점"
+description: >
+  파일 업로드 시 파일 확장자와 MIME 타입 검사를 하지 않아 악성 파일이 업로드된다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: POST
+  path: /upload
+params:
+  file: "malicious.php"
+auth_required: false
+severity: high
+tags: [file, upload, vulnerability]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        PHP에서 파일 업로드 시 확장자 및 MIME 타입 검사를 하지 않아서 악성 파일이 업로드 가능.
+      file_path: "public/upload.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        Flask에서 파일 업로드 시 확장자 및 MIME 타입 검사를 하지 않아서 악성 파일이 업로드 가능.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []

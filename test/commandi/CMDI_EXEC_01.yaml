@@ -1,42 +1,40 @@
 # ---------------------------------------------------------------------------
 # schema_version: 1.0
 # ---------------------------------------------------------------------------
-id: RXSS_SEARCH_01
-title: "Reflected XSS – Search 결과 페이지"
+id: CMDI_EXEC_01
+title: "Command Injection – 시스템 명령 실행"
 description: >
-  /search?q=... 에서 입력값 q 가 HTML에 그대로 반사된다.
+  사용자 입력을 그대로 시스템 명령어로 실행하여 공격자가 원격 시스템 명령어를 실행할 수 있다.
 stack:
   - php
   - flask
 host:
   php: localhost:8081  # PHP 애플리케이션 호스트
-  flask: localhost:5000  # Flask 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
 endpoint:
   method: GET
-  path: /search
+  path: /ping
 params:
-  q: "<svg/onload=alert(1)>"
+  host: "127.0.0.1; rm -rf /"
 auth_required: false
 severity: high
-tags: [xss, reflected, search]
+tags: [command, injection, system]
 
 # 개발자 참고용
 implementation:
   php:
     notes:
       summary: >
-        search.php 에서 $_GET['q'] 를 htmlspecialchars 없이 echo.
-      file_path: "public/search.php"
+        PHP에서 `exec()`로 사용자 입력을 실행하여 Command Injection 취약점 발생.
+      file_path: "public/ping.php"
     database:
       engine: mysql
       init_sql: []
   flask:
     notes:
       summary: >
-        Flask에서 `request.args.get('q')`를 htmlspecialchars 없이 출력하는 취약점.
+        Flask에서 `subprocess.run()`으로 사용자 입력을 실행하여 Command Injection 취약점 발생.
       file_path: "app.py"
     database:
       engine: postgres
       init_sql: []
-
-# fixtures: []         # 필요 시 테스트 데이터·파일

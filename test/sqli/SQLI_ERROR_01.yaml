@@ -1,0 +1,41 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: SQLI_ERROR_01
+title: "SQL Injection – Error 기반 (로그인)"
+description: >
+  로그인 시 SQL 쿼리에 삽입된 잘못된 입력으로 인해 에러 메시지를 유발하며, 이를 통해 SQL Injection이 가능한지 확인한다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: POST
+  path: /login
+params:
+  username: "'"
+  password: "test"
+auth_required: false
+severity: high
+tags: [sql, injection, error-based, login]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        login.php에서 쿼리 구성 시 사용자 입력을 직접 포함하여, 따옴표를 닫지 않아 쿼리 에러가 발생하고, 에러 메시지를 통해 DB 구조 정보를 노출할 수 있음.
+      file_path: "public/login.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        Flask 로그인 로직에서 사용자의 입력을 쿼리에 직접 포함해, SQL 문법 오류 발생 시 예외 메시지를 통해 취약점 유출 가능.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []

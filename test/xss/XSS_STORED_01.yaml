@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: SXSS_STORED_01
+title: "Stored XSS – 사용자 게시판"
+description: >
+  사용자가 게시한 글에 HTML 입력값이 저장되어 다시 불러올 때 실행된다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: POST
+  path: /post_message
+params:
+  message: "<script>alert('Stored XSS')</script>"
+auth_required: false
+severity: high
+tags: [xss, stored, post]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        게시판의 메시지 저장 시 HTML 특수 문자를 필터링하지 않고 저장.
+      file_path: "public/post_message.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        게시판의 메시지 저장 시 HTML 특수 문자를 필터링하지 않고 저장.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []
