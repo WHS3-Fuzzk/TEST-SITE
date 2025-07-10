@@ -1,16 +1,38 @@
 <!DOCTYPE html>
 <html>
-<head><title>DOM XSS</title></head>
+
+<head>
+    <title>DOM XSS</title>
+</head>
+
 <body>
     <h2>DOM XSS 테스트</h2>
     <input id="input" placeholder="메시지를 입력하세요">
     <button onclick="run()">실행</button>
     <div id="output"></div>
     <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        window.onload = function () {
+            var msg = getQueryParam('msg') || "default"; // 여기 기본값
+            if (msg) {
+                document.getElementById('input').value = msg;
+                document.getElementById('output').innerHTML = msg; // 취약한 부분
+            }
+        };
+
         function run() {
             var msg = document.getElementById("input").value;
-            document.getElementById("output").innerHTML = msg;
+            // 현재 페이지를 msg 파라미터를 포함하여 다시 로드
+            var url = new URL(window.location.href);
+            url.searchParams.set('msg', msg);
+            window.location.href = url.toString();
         }
     </script>
+
 </body>
+
 </html>
