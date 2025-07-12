@@ -1,0 +1,40 @@
+# ---------------------------------------------------------------------------
+# schema_version: 1.0
+# ---------------------------------------------------------------------------
+id: FILE_DOWNLOAD_01
+title: "파일 다운로드 취약점"
+description: >
+  다운로드 요청 시 파일명에 대한 유효성 검사를 수행하지 않아 디렉터리 탈출 등의 공격이 가능하다.
+stack:
+  - php
+  - flask
+host:
+  php: localhost:8081  # PHP 애플리케이션 호스트
+  flask: localhost:8082  # Flask 애플리케이션 호스트
+endpoint:
+  method: GET
+  path: /download
+params:
+  file: "../../etc/passwd"
+auth_required: false
+severity: high
+tags: [file, download, vulnerability]
+
+# 개발자 참고용
+implementation:
+  php:
+    notes:
+      summary: >
+        PHP에서 다운로드 시 파일명에 대한 필터링이 없어 디렉터리 탈출 공격이 가능.
+      file_path: "public/download.php"
+    database:
+      engine: mysql
+      init_sql: []
+  flask:
+    notes:
+      summary: >
+        Flask에서 다운로드 시 `file` 파라미터를 필터링하지 않아 공격자가 시스템 파일 접근 가능.
+      file_path: "app.py"
+    database:
+      engine: postgres
+      init_sql: []
