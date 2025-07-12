@@ -129,13 +129,30 @@ def fetch():
     return render_template('fetch.html', response=response_text)
 
 # -------------------- 8. File Download --------------------
+# 다운로드 UI 페이지
 @app.route('/download')
 def download():
-    filename = request.args.get('file')
-    if not filename or '..' in filename or filename.startswith('/'):
-        return "잘못된 파일 요청", 400
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+    return render_template('download.html')
 
+# 실제 파일 다운로드 처리
+@app.route('/download/file')
+def download_file():
+    filename = request.args.get('file')
+    if not filename:
+        return "file 파라미터가 필요합니다.", 400
+
+    # 경로 우회를 허용 (퍼징용)
+    download_dir = os.path.abspath(app.config['UPLOAD_FOLDER'])
+    requested_path = os.path.abspath(os.path.join(download_dir, filename.lstrip('/')))
+
+    if not os.path.isfile(requested_path):
+        return "파일이 존재하지 않습니다.", 404
+
+    return send_from_directory(
+        directory=os.path.dirname(requested_path),
+        path=os.path.basename(requested_path),
+        as_attachment=True
+    )
 
 # -------------------- 서버 실행 --------------------
 if __name__ == '__main__':
