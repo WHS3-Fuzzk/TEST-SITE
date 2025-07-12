@@ -101,13 +101,19 @@ def uploaded_file(filename):
 def ping():
     output = ''
     if request.method == 'POST':
-        host = request.form['host']
+        host = request.form.get('host', '').strip()
         try:
-            result = subprocess.run(['ping', '-c', '2', host], capture_output=True, text=True)
-            output = result.stdout
+            # 호스트 검증 로직 제거, 직접 ping 호출
+            result = subprocess.run(
+                ['ping', '-n', '2', host],
+                capture_output=True,
+                text=True
+            )
+            output = result.stdout or result.stderr
         except Exception as e:
             output = str(e)
     return render_template('ping.html', output=output)
+
 
 # -------------------- 7. SSRF --------------------
 @app.route('/fetch', methods=['GET', 'POST'])
