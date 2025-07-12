@@ -1,10 +1,17 @@
 <?php
+if (!function_exists('str_starts_with')) {
+    function str_starts_with($haystack, $needle) {
+        return substr($haystack, 0, strlen($needle)) === $needle;
+    }
+}
+
 $filename = $_GET['file'] ?? '';
 if (!$filename || strpos($filename, '..') !== false || str_starts_with($filename, '/')) {
     http_response_code(400);
     echo "잘못된 요청";
     exit;
 }
+
 $path = 'uploads/' . $filename;
 if (file_exists($path)) {
     header('Content-Description: File Transfer');
@@ -15,3 +22,4 @@ if (file_exists($path)) {
 } else {
     echo "파일이 존재하지 않습니다.";
 }
+?>
