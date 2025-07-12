@@ -13,7 +13,7 @@ if (!file_exists('db_init.lock')) {
 <ul>
     <li><a href="search.php">1. Reflected XSS</a></li>
     <li><a href="comment.php">2. Stored XSS</a></li>
-    <li><a href="dom_xss.html">3. DOM XSS</a></li>
+    <li><a href="dom_xss.php">3. DOM XSS</a></li>
     <li><a href="login.php">4. SQL Injection</a></li>
     <li><a href="upload.php">5. 파일 업로드</a></li>
     <li><a href="ping.php">6. Command Injection</a></li>
