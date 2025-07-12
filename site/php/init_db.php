@@ -31,4 +31,12 @@ $conn->query("
     )
 ");
 
+$conn->query("
+    INSERT INTO user (username, password)
+    SELECT * FROM (SELECT 'admin', 'admin123') AS tmp
+    WHERE NOT EXISTS (
+        SELECT username FROM user WHERE username = 'admin'
+    ) LIMIT 1
+");
+
 ?>
