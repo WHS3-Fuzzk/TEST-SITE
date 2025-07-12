@@ -122,6 +122,15 @@ def fetch():
             response_text = str(e)
     return render_template('fetch.html', response=response_text)
 
+# -------------------- 8. File Download --------------------
+@app.route('/download')
+def download():
+    filename = request.args.get('file')
+    if not filename or '..' in filename or filename.startswith('/'):
+        return "잘못된 파일 요청", 400
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=True)
+
+
 # -------------------- 서버 실행 --------------------
 if __name__ == '__main__':
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
