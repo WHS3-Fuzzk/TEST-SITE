@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mysql:
     image: mysql:8
@@ -36,3 +34,35 @@ services:
       - ./site/php:/var/www/html
     depends_on:
       - mysql
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_ROOT_PASSWORD: root
+      POSTGRES_DB: vuln_db
+      POSTGRES_USER: vuln
+      POSTGRES_PASSWORD: vuln
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init/postgres:/docker-entrypoint-initdb.d
+
+  flask:
+    build: ./site/flask
+    container_name: flask
+    restart: on-failure
+    ports:
+      - "8082:8082"
+    environment:
+      POSTGRES_USER: vuln
+      POSTGRES_PASSWORD: vuln
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: vuln_db
+    volumes:
+      - ./site/flask:/app
+      - ./uploads:/app/uploads
+    depends_on:
+      - postgres
