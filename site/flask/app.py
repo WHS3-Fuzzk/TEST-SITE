@@ -132,16 +132,12 @@ def fetch():
 # 다운로드 UI 페이지
 @app.route('/download')
 def download():
-    return render_template('download.html')
-
-# 실제 파일 다운로드 처리
-@app.route('/download/file')
-def download_file():
     filename = request.args.get('file')
     if not filename:
-        return "file 파라미터가 필요합니다.", 400
+        # 파일명이 없으면 다운로드 페이지 렌더링
+        return render_template('download.html')
 
-    # 경로 우회를 허용 (퍼징용)
+    # 파일명이 있으면 다운로드 로직 수행
     download_dir = os.path.abspath(app.config['UPLOAD_FOLDER'])
     requested_path = os.path.abspath(os.path.join(download_dir, filename.lstrip('/')))
 
