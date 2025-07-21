@@ -18,7 +18,7 @@ if (!file_exists('db_init.lock')) {
     <li><a href="upload.php">5. 파일 업로드</a></li>
     <li><a href="ping.php">6. Command Injection</a></li>
     <li><a href="fetch.php">7. SSRF</a></li>
-    <li><a href="download.php">8. 파일 다운로드</a></li>
+    <li><a href="download.php">8. File Download</a></li>
 </ul>
 </body>
 </html>
