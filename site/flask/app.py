@@ -120,7 +120,12 @@ def ping():
 def fetch():
     response_text = ''
     if request.method == 'POST':
-        url = request.form['url']
+        url = request.form['url'].strip()
+
+        # 프로토콜이 없으면 자동으로 http:// 붙이기
+        if not url.startswith('http://') and not url.startswith('https://'):
+            url = 'http://' + url
+
         try:
             r = requests.get(url, timeout=3)
             response_text = r.text[:300]
