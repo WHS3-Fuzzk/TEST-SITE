@@ -62,7 +62,6 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: vuln_db
     volumes:
-      - ./site/flask:/app
-      - ./uploads:/app/uploads
+      - ./site/flask/uploads:/app/uploads
     depends_on:
       - postgres
