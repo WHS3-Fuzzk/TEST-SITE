@@ -121,8 +121,12 @@ def fetch():
     response_text = ''
     if request.method == 'POST':
         url = request.form['url']
+        if not url.startswith(('http://', 'https://')):
+            url = 'http://' + url  # 기본적으로 http 프로토콜 사용
         try:
-            r = requests.get(url, timeout=3)
+            print(f"Fetching URL: {url}", flush=True)  # 디버깅용 로그
+            app.logger.info(f"Fetching URL: {url}")
+            r = requests.get(url, timeout=10)
             response_text = r.text[:300]
         except Exception as e:
             response_text = str(e)
