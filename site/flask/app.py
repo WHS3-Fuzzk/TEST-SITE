@@ -59,6 +59,7 @@ def dom_xss():
 # -------------------- 4. SQL Injection (Error-based) --------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    message = ''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -76,7 +77,7 @@ def login():
                 return "아이디 또는 비밀번호가 틀렸습니다."
         except Exception as e:
             return str(e)
-    return render_template('login.html')
+    return render_template('login.html', message=message)
 
 # -------------------- 5. File Upload --------------------
 @app.route('/upload', methods=['GET', 'POST'])
