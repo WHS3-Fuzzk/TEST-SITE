@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 import os
 import subprocess
 import requests
+import platform
 
 # .env 파일에서 환경 변수 불러오기
 load_dotenv()
@@ -107,9 +108,12 @@ def ping():
     if request.method == 'POST':
         host = request.form.get('host', '').strip()
         try:
-            # 호스트 검증 로직 제거, 직접 ping 호출
+            # OS에 따라 ping 옵션 선택 (Windows: -n, Linux/macOS: -c)
+            ping_option = '-n' if platform.system() == 'Windows' else '-c'
+            command = f"ping {ping_option} 2 {host}"
             result = subprocess.run(
-                ['ping', '-n', '2', host],
+                command,
+                shell=True,
                 capture_output=True,
                 text=True
             )
