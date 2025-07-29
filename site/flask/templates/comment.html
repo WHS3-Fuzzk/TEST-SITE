@@ -1,16 +1,205 @@
 <!DOCTYPE html>
-<html>
-<head><title>Stored XSS</title></head>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored XSS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .comments-section {
+            margin-top: 30px;
+        }
+
+        .comments-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .comment {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .comment p {
+            color: #495057;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .no-comments {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
 <body>
-    <h2>Stored XSS 게시판</h2>
-    <form method="post">
-        <textarea name="content" rows="4" cols="40" placeholder="댓글 입력"></textarea><br>
-        <button type="submit">등록</button>
-    </form>
-    <hr>
-    <h3>댓글 목록:</h3>
-    {% for c in comments %}
-        <p>{{ c.content | safe }}</p>
-    {% endfor %}
+    <div class="container">
+        <div class="header">
+            <h2>💬 Stored XSS 게시판</h2>
+        </div>
+        
+        <div class="content">
+            <div class="warning">
+                ⚠️ 이 페이지는 Stored XSS 취약점을 테스트하기 위한 교육용 페이지입니다.
+            </div>
+            
+            <div class="form-section">
+                <h3>📝 새 댓글 작성</h3>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="content">댓글 내용:</label>
+                        <textarea id="content" name="content" placeholder="댓글을 입력하세요..."></textarea>
+                    </div>
+                    <button type="submit" class="btn">💬 댓글 등록</button>
+                </form>
+            </div>
+            
+            <div class="comments-section">
+                <h3>📋 댓글 목록</h3>
+                {% if comments %}
+                    {% for c in comments %}
+                    <div class="comment">
+                        <p>{{ c.content | safe }}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-comments">
+                        <p>아직 등록된 댓글이 없습니다.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <a href="{{ url_for('index') }}" class="back-link">← 메인 페이지로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>

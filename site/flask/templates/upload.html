@@ -1,12 +1,218 @@
 <!DOCTYPE html>
-<html>
-<head><title>File Upload</title></head>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px dashed #667eea;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .file-input:hover {
+            border-color: #764ba2;
+            background: #f8f9fa;
+        }
+
+        .file-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+        }
+
+        .message.error {
+            background: linear-gradient(135deg, #e17055, #d63031);
+            color: white;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #764ba2;
+        }
+
+        .warning {
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .info-box h4 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+    </style>
+</head>
 <body>
-    <h2>파일 업로드</h2>
-    <form method="post" enctype="multipart/form-data">
-        파일 선택: <input type="file" name="file">
-        <button type="submit">업로드</button>
-    </form>
-    <p>{{ message }}</p>
+    <div class="container">
+        <div class="header">
+            <h2>📁 파일 업로드</h2>
+        </div>
+        
+        <div class="content">
+            <div class="warning">
+                ⚠️ 이 페이지는 파일 업로드 취약점을 테스트하기 위한 교육용 페이지입니다.
+            </div>
+            
+            <div class="info-box">
+                <h4>💡 업로드 가능한 파일</h4>
+                <p>텍스트 파일, 이미지 파일 등 다양한 파일 형식을 업로드할 수 있습니다.</p>
+            </div>
+            
+            <div class="form-section">
+                <h3>📤 파일 선택</h3>
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="file">파일 선택:</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="file" name="file" class="file-input" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">📁 파일 업로드</button>
+                </form>
+            </div>
+            
+            {% if message %}
+            <div class="message {% if '완료' in message %}success{% else %}error{% endif %}">
+                {{ message }}
+            </div>
+            {% endif %}
+            
+            <a href="{{ url_for('index') }}" class="back-link">← 메인 페이지로 돌아가기</a>
+        </div>
+    </div>
 </body>
 </html>
