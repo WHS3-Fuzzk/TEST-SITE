@@ -59,21 +59,24 @@ def dom_xss():
 # -------------------- 4. SQL Injection (Error-based) --------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    message = ''
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         try:
-            result = db.session.execute(
-                f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'"
-            ).fetchone()
+            connection = db.engine.raw_connection()
+            cursor = connection.cursor()
+            query = f"SELECT * FROM user WHERE username = '{username}' AND password = '{password}'"
+            cursor.execute(query)
+            result = cursor.fetchone()
+            connection.close()
+
             if result:
-                message = "로그인 성공!"
+                return "로그인 성공!"
             else:
-                message = "아이디 또는 비밀번호가 틀렸습니다."
+                return "아이디 또는 비밀번호가 틀렸습니다."
         except Exception as e:
-            message = f"에러 발생: {str(e)}"
-    return render_template('login.html', message=message)
+            return str(e)
+    return render_template('login.html')
 
 # -------------------- 5. File Upload --------------------
 @app.route('/upload', methods=['GET', 'POST'])
