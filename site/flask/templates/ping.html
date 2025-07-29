@@ -190,39 +190,39 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>🖥️ Command Injection 테스트</h2>
+            <h2>Command Injection 테스트</h2>
         </div>
         
         <div class="content">
             <div class="warning">
-                ⚠️ 이 페이지는 Command Injection 취약점을 테스트하기 위한 교육용 페이지입니다.
+                이 페이지는 Command Injection 취약점을 테스트하기 위한 교육용 페이지입니다.
             </div>
             
             <div class="info-box">
-                <h4>💡 Ping 명령어 테스트</h4>
+                <h4>Ping 명령어 테스트</h4>
                 <p>호스트나 IP 주소를 입력하여 ping 명령어를 실행합니다.</p>
             </div>
             
             <div class="form-section">
-                <h3>🌐 호스트 입력</h3>
+                <h3>호스트 입력</h3>
                 <form method="post">
                     <div class="form-group">
                         <label for="host">Host/IP:</label>
                         <input type="text" id="host" name="host" placeholder="예: google.com 또는 8.8.8.8">
                     </div>
-                    <button type="submit" class="btn">🖥️ Ping 실행</button>
+                    <button type="submit" class="btn">Ping 실행</button>
                 </form>
             </div>
             
             {% if output %}
             <div class="output-section">
-                <h3>📋 실행 결과</h3>
+                <h3>실행 결과</h3>
                 <div class="output">{{ output }}</div>
             </div>
             {% endif %}
             
             <div class="examples">
-                <h4>💡 테스트 예시</h4>
+                <h4>테스트 예시</h4>
                 <div class="example-item">google.com</div>
                 <div class="example-item">8.8.8.8</div>
                 <div class="example-item">localhost</div>

@@ -135,12 +135,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2>🔍 Reflected XSS 테스트</h2>
+            <h2>Reflected XSS 테스트</h2>
         </div>
         
         <div class="content">
             <div class="warning">
-                ⚠️ 이 페이지는 Reflected XSS 취약점을 테스트하기 위한 교육용 페이지입니다.
+                이 페이지는 Reflected XSS 취약점을 테스트하기 위한 교육용 페이지입니다.
             </div>
             
             <form method="get">
@@ -148,12 +148,12 @@
                     <label for="search">검색어:</label>
                     <input type="text" id="search" name="q" placeholder="검색어를 입력하세요..." value="{{ query or '' }}">
                 </div>
-                <button type="submit" class="btn">🔍 검색</button>
+                                    <button type="submit" class="btn">검색</button>
             </form>
             
             {% if query %}
             <div class="result">
-                <h3>📋 검색 결과:</h3>
+                <h3>검색 결과:</h3>
                 <p>{{ query | safe }}</p>
             </div>
             {% endif %}
